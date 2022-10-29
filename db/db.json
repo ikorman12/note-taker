@@ -1,7 +1,18 @@
 [
     {
-    "title":"Note Title",
-    "text": "What would you like to say?"
+        "title": "Note Title",
+        "text": "What would you like to say?"
     },
-{"title":"Hello World","text":"dlksandksabdhsabdsahjdbksadnsajld"}
+    {
+        "title": "Hello World",
+        "text": "dlksandksabdhsabdsahjdbksadnsajld"
+    },
+    {
+        "title": "I like apples",
+        "text": "dlksandksabdhsabdsahjdbksadnsajld"
+    },
+    {
+        "title": "I like dogs",
+        "text": "dlksandksabdhsabdsahjdbksadnsajld"
+    }
 ]

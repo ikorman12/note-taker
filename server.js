@@ -1,7 +1,6 @@
 const express = require('express');
-const fs = require('fs');
 const notes= require('./db/db.json');
-
+const { readAndAppend, readFromFile } = require('./helpers/fsUtils');
 
 
 const PORT = process.env.PORT || 3001;
@@ -34,9 +33,12 @@ console.info(`${req.method} request received`);
 
 // GET route for all notes
 app.get('/api/notes', (req,res) =>
-{
-    return res.status(200).json(notes);
-});
+    readFromFile('./db/db.json')
+    .then((data)=>res.json(JSON.parse(data)))
+);
+// {
+//     return res.status(200).json(notes);
+// });
 
 //POST route for adding notes to notes api
 app.post('/api/notes', (req, res) => {
@@ -46,16 +48,16 @@ app.post('/api/notes', (req, res) => {
 
   // Check if there is anything in the response body
   if (title && text) {
-    const newNote={
+    const newNote = {
         title,
         text,
     };
     // convert data into string
-    const noteString =JSON.stringify(newNote);
+    const noteString = JSON.stringify(newNote);
 
     //write string to a file
-    fs.appendFile(`./db/db.json`,
-    noteString, (err) => 
+    readAndAppend( newNote, `./db/db.json`,
+    (err) => 
     err
     ? console.error(err)
     : console.log(
@@ -65,7 +67,7 @@ app.post('/api/notes', (req, res) => {
 
     const response = {
       status: 'success',
-      data: req.body,
+      body: newNote,
     };
 
   // Log the response body to the console

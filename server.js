@@ -1,5 +1,7 @@
 const express = require('express');
 const fs = require('fs');
+const notes= require('./db/db.json');
+
 
 
 const PORT = process.env.PORT || 3001;
@@ -22,13 +24,16 @@ app.get('/notes', (req,res) =>
 res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
-//GET route for api/notes
-// app.get('/api/notes', (req,res) =>
-// fs.writeFile('')
+
+// GET route for api/notes
+app.get('/api/notes', (req,res) =>
+{
+    res.status(200).json(notes);
+});
 
 //POST route for adding notes to notes api
 
-app
+// app
 
 
 

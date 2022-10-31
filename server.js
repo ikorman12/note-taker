@@ -1,5 +1,6 @@
 const express = require('express');
 const notes= require('./db/db.json');
+const uuid = require('./helpers/uuid')
 const { readAndAppend, readFromFile } = require('./helpers/fsUtils');
 
 
@@ -7,12 +8,12 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 const path= require('path');
+const { json } = require('express');
 
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-// app.use('/api/notes';
 
 //GET route for homepage
 app.get('/', (req,res) => {
@@ -36,9 +37,6 @@ app.get('/api/notes', (req,res) =>
     readFromFile('./db/db.json')
     .then((data)=>res.json(JSON.parse(data)))
 );
-// {
-//     return res.status(200).json(notes);
-// });
 
 //POST route for adding notes to notes api
 app.post('/api/notes', (req, res) => {
@@ -51,6 +49,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
         title,
         text,
+        id: uuid(),
     };
     // convert data into string
     const noteString = JSON.stringify(newNote);
@@ -76,12 +75,19 @@ app.post('/api/notes', (req, res) => {
 }else {
     res.status(500).json(`Error in posting note`);
 }
+
+//delete a note
+app.delete('/api/notes/:id', async (req, res) => {
+    const {id} = req.params;
+    try{
+    await db('api/notes').where({id}).del()
+    res.status(200).json(`Note was succesfully deleted`)
+    } catch(err){
+    console.log(`unable to delete note`)
+ }
+})
   
 });
-
-// app
-
-
 
 app.listen(PORT, () =>
 console.log(`App listening at http://localhost:${PORT}🚀`));
